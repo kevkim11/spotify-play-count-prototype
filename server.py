@@ -3,6 +3,7 @@ import requests # API call
 import json # store json object in a .json file.
 import logging
 import datetime
+import os
 
 # google api
 import gspread
@@ -13,6 +14,8 @@ limit = 50
 BASE_URL = 'https://api.spotify.com/v1/me/'
 FETCH_URL = BASE_URL + 'player/recently-played?limit=' + str(limit)
 
+path = os.path.dirname(os.path.abspath(__file__)) # /Users/kevkim/GitHub/spotify-play-count
+path += "/secret"
 logger = logging.getLogger()
 
 def diff(arr1, arr2):
@@ -48,7 +51,8 @@ def diff_json_obj(arr1, arr2):
 def update_google_sheets(dif_items):
     # Google Spread Sheet Credentials
     scope = ['https://spreadsheets.google.com/feeds']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('/Users/kevkim/GitHub/spotify-play-count/secret/google_secret_client.json', scopes=scope)
+    google_secret_client_file = path + "/google_secret_client.json"
+    creds = ServiceAccountCredentials.from_json_keyfile_name(google_secret_client_file, scopes=scope)
     gs_client = gspread.authorize(credentials=creds)
     sheet = gs_client.open('Spotify Play Count').sheet1
     print "ADD/UPDATE google sheets"
@@ -94,16 +98,17 @@ if __name__ == "__main__":
 
     # 1) Fetch new data
     print "READ spotify json files"
-    with open('/Users/kevkim/GitHub/spotify-play-count/secret/tokens.json', 'r') as fp:
+    tokens_file = path + "/tokens.json"
+    with open(tokens_file, 'r') as fp:
         tokens = json.load(fp)
         access_token = str(tokens["access_token"])
         refresh_token = str(tokens["refresh_token"])
 
-    with open('/Users/kevkim/GitHub/spotify-play-count/secret/spotify_client_secret.json', 'r') as fp:
+    spotify_client_secret_file = path + "/spotify_client_secret.json"
+    with open(spotify_client_secret_file, 'r') as fp:
         client = json.load(fp)
         client_id = str(client["client_id"])
         client_secret = str(client["client_secret"])
-        # redirect_uri = str(client["redirect_uri"])
 
     # Refresh token
     auth_header = base64.b64encode(str(client_id + ':' + client_secret).encode())
@@ -128,7 +133,8 @@ if __name__ == "__main__":
 
     # 2.1) Load saved data
     print "READ previous last played json"
-    with open('/Users/kevkim/GitHub/spotify-play-count/secret/previous_last_played.json', 'r') as fp:
+    previous_last_played_file = path + "/previous_last_played.json"
+    with open(previous_last_played_file, 'r') as fp:
         data = json.load(fp)
 
     saved_items = data["items"]
@@ -147,9 +153,9 @@ if __name__ == "__main__":
 
         print "WRITE new last played"
         # Save the fetched data last, after the table has been updated
-        with open('/Users/kevkim/GitHub/spotify-play-count/secret/previous_last_played.json', 'w') as fp:
+        with open(previous_last_played_file, 'w') as fp:
             json.dump(content, fp)
     print "WRITE new tokens"
     # Save the refreshed access token
-    with open('/Users/kevkim/GitHub/spotify-play-count/secret/tokens.json', 'w') as fp:
+    with open(tokens_file, 'w') as fp:
         json.dump(tokens, fp)
