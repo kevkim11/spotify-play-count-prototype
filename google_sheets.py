@@ -3,14 +3,15 @@ from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
-
+# paths
 path = os.path.dirname(os.path.abspath(__file__))
 path += "/secret"
+google_secret_client_file = path + "/google_secret_client.json"
+
+scope = ['https://spreadsheets.google.com/feeds']
 
 def update_google_sheets(dif_items):
     # Google Spread Sheet Credentials
-    scope = ['https://spreadsheets.google.com/feeds']
-    google_secret_client_file = path + "/google_secret_client.json"
     creds = ServiceAccountCredentials.from_json_keyfile_name(google_secret_client_file, scopes=scope)
     gs_client = gspread.authorize(credentials=creds)
     sheet = gs_client.open('Spotify Play Count').sheet1
@@ -27,8 +28,7 @@ def update_google_sheets(dif_items):
         # if session expires, re-login
         if creds.access_token_expired:
             gs_client.login()
-        # if it already exists, update the play count and last played
-        if track_id in result_dict:
+        if track_id in result_dict: # if it already exists, update the play count and last played
             already_played_track = result_dict[track_id]
             print "Updating track " + already_played_track["track_name"]
             row_id = already_played_track["id"] + 1
@@ -39,7 +39,6 @@ def update_google_sheets(dif_items):
             sheet.update_cell(row_id, 9, last_played)
         else:
             # insert a new row
-
             print str(index) + ") it doesn't exist so need to create "+ item["track"]["name"]
             row = [index,
                    item["track"]["name"],
@@ -49,6 +48,7 @@ def update_google_sheets(dif_items):
                    1, # play count is always 1
                    item["track"]["album"]["name"],
                    item["track"]["album"]["id"],
+                   item["played_at"],
                    item["played_at"]
                    ]
             sheet.append_row(row)

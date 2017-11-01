@@ -15,7 +15,7 @@ import json
 path = os.path.dirname(os.path.abspath(__file__))
 path += "/secret"
 
-with open('/Users/kevkim/GitHub/spotify-play-count/secret/tokens.json', 'r') as fp:
+with open('/Users/kevkim/GitHub/spotify-play-count/secret/token.json', 'r') as fp:
     tokens = json.load(fp)
 
 print path
