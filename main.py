@@ -3,6 +3,7 @@ import requests # API call
 import json # store json object in a .json file.
 
 import os
+import sys
 
 # google api
 from google_sheets import update_google_sheets
@@ -37,15 +38,13 @@ def diff_json_obj(arr1, arr2):
 
 def get_spotify_access_token():
     """
-
-    :return: spotify token
+    Using spotify's
+    * client_id
+    * client_secret
+    * refresh_token
+    get a new spotify access token
+    :return: spotify access token
     """
-    return
-
-
-
-if __name__ == "__main__":
-
     # 1) Fetch new data
     print "READ spotify json files"
     with open(refresh_token_file, 'r') as fp:
@@ -58,22 +57,45 @@ if __name__ == "__main__":
         client_secret = str(client["client_secret"])
 
     # Refresh token
-    auth_header = base64.b64encode(str(client_id + ':' + client_secret).encode())
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
-    headers = {'Authorization': 'Basic %s' % auth_header.decode()}
     payload = {'refresh_token': refresh_token,
                'grant_type': 'refresh_token'}
+
+    if sys.version_info[0] >= 3:  # Python 3
+        auth_header = base64.b64encode(str(client_id + ':' + client_secret).encode())
+        headers = {'Authorization': 'Basic %s' % auth_header.decode()}
+    else:  # Python 2
+        auth_header = base64.b64encode(client_id + ':' + client_secret)
+        headers = {'Authorization': 'Basic %s' % auth_header}
+
     print "POST refresh token"
     response = requests.post(OAUTH_TOKEN_URL, data=payload, headers=headers)
+    if response.status_code != 200:
+        print "response.status_code = " + str(response.status_code)
+        # return None
     token_info = response.json()
+    return token_info["access_token"]
 
+def get_spotify_recently_played(access_token):
+    """
+
+    :param access_token:
+    :return:
+    """
     header = {
-        'Authorization': 'Bearer ' + token_info["access_token"]
+        'Authorization': 'Bearer ' + access_token
     }
-
     print "GET Spotify Recently Played API"
     r = requests.get(FETCH_URL, headers=header)
     content = r.json()
+    fetched_items = content["items"]
+    return content
+
+if __name__ == "__main__":
+
+    access_token = get_spotify_access_token()
+
+    content = get_spotify_recently_played(access_token)
     fetched_items = content["items"]
 
     # 2.1) Load saved data
