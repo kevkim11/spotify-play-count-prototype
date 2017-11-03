@@ -25,8 +25,7 @@ def update_google_sheets(dif_items):
 
         track_id = item["track"]["id"] # will use track_id since it's unique
         index = sheet.row_count
-        # if session expires, re-login
-        if creds.access_token_expired:
+        if creds.access_token_expired: # if session expires, re-login
             gs_client.login()
         if track_id in result_dict: # if it already exists, update the play count and last played
             already_played_track = result_dict[track_id]
@@ -40,12 +39,14 @@ def update_google_sheets(dif_items):
         else:
             # insert a new row
             print str(index) + ") it doesn't exist so need to create "+ item["track"]["name"]
+            artists_name_list = [artist["name"] for artist in item["track"]["artists"]]
+            artists_name_str = ', '.join(artists_name_list)
             row = [index,
                    item["track"]["name"],
                    item["track"]["id"],
-                   item["track"]["artists"][0]["name"],
+                   artists_name_str,
                    item["track"]["artists"][0]["id"],
-                   1, # play count is always 1
+                   1, # first listen
                    item["track"]["album"]["name"],
                    item["track"]["album"]["id"],
                    item["played_at"],
