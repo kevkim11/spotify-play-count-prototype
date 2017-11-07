@@ -11,24 +11,22 @@ if __name__=="__main__":
 
     with open('./secret/refresh_token.json', 'r') as fp:
         tokens = json.load(fp)
-        # access_token = str(tokens["access_token"])
         refresh_token = str(tokens["refresh_token"])
 
     with open('./secret/spotify_client_secret.json', 'r') as fp:
         client = json.load(fp)
         client_id = str(client["client_id"])
         client_secret = str(client["client_secret"])
-        # redirect_uri = str(client["redirect_uri"])
 
     auth_header = base64.b64encode(str(client_id + ':' + client_secret).encode())
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
     headers = {'Authorization': 'Basic %s' % auth_header.decode()}
     payload = {'refresh_token': refresh_token,
                'grant_type': 'refresh_token'}
-    response = requests.post(OAUTH_TOKEN_URL, data=payload,
+    response = requests.post(OAUTH_TOKEN_URL,
+                             data=payload,
                              headers=headers)
     token_info = response.json()
-    # tokens["access_token"] = token_info["access_token"]
     with open('./secret/tokens.json', 'w') as fp:
         json.dump(tokens, fp)
 

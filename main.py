@@ -2,7 +2,9 @@ import base64
 import requests # API call
 import json # store json object in a .json file.
 
-import os
+from general_const import *
+
+# import os
 import sys
 
 # google api
@@ -13,12 +15,12 @@ limit = 50
 BASE_URL = 'https://api.spotify.com/v1/me/'
 FETCH_URL = BASE_URL + 'player/recently-played?limit=' + str(limit)
 
-# Paths
-path = os.path.dirname(os.path.abspath(__file__))
-path += "/secret"
-refresh_token_file = path + "/refresh_token.json"
-spotify_client_secret_file = path + "/spotify_client_secret.json"
-previous_last_played_file = path + "/previous_last_played.json"
+# # Paths
+# path = os.path.dirname(os.path.abspath(__file__))
+# path += "/secret"
+# refresh_token_file = path + "/refresh_token.json"
+# spotify_client_secret_file = path + "/spotify_client_secret.json"
+# previous_last_played_file = path + "/previous_last_played.json"
 
 def diff_json_obj(arr1, arr2):
     """
@@ -116,3 +118,5 @@ if __name__ == "__main__":
         # Save the fetched data last, after the table has been updated
         with open(previous_last_played_file, 'w') as fp:
             json.dump(content, fp)
+    else:
+        print "Nothing was updated"
