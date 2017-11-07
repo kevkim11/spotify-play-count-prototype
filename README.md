@@ -1,6 +1,17 @@
 # spotify-play-count
 
-## 1) Set-Up
+This is a python script that calls the Spotify Web API and creates a table in google sheets that keeps track
+of personal play counts of tracks the user has listened to on their Spotify account.
+
+## Installation
+
+  Clone this repository and install it's dependencies running
+
+    pip install -r requirements.txt
+
+  
+
+## Set-Up
 
   * Spotify api - https://developer.spotify.com/web-api/
 
