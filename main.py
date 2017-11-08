@@ -11,7 +11,7 @@ import sys
 from google_sheets import update_google_sheets
 
 # Spotify Credentials
-limit = 50
+limit = 50 # Max limit
 BASE_URL = 'https://api.spotify.com/v1/me/'
 FETCH_URL = BASE_URL + 'player/recently-played?limit=' + str(limit)
 

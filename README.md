@@ -9,7 +9,7 @@ of personal play counts of tracks the user has listened to on their Spotify acco
 
     pip install -r requirements.txt
 
-  
+
 
 ## Set-Up
 
@@ -29,3 +29,7 @@ of personal play counts of tracks the user has listened to on their Spotify acco
   * Google Sheets api -
 
 ## 3) Cron Job
+
+## FAQ
+What happens if I am listening to my music offline?
+

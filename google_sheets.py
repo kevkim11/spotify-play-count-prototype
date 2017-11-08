@@ -1,12 +1,6 @@
-import os
-from datetime import datetime
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-
-# paths
-path = os.path.dirname(os.path.abspath(__file__))
-path += "/secret"
-google_secret_client_file = path + "/google_secret_client.json"
+from general_const import *
 
 scope = ['https://spreadsheets.google.com/feeds']
 
