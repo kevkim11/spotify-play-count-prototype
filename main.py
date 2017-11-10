@@ -1,10 +1,8 @@
 import base64
-import requests # API call
-import json # store json object in a .json file.
+import requests
+import json
 
 from general_const import *
-
-# import os
 import sys
 
 # google api
@@ -15,12 +13,6 @@ limit = 50 # Max limit
 BASE_URL = 'https://api.spotify.com/v1/me/'
 FETCH_URL = BASE_URL + 'player/recently-played?limit=' + str(limit)
 
-# # Paths
-# path = os.path.dirname(os.path.abspath(__file__))
-# path += "/secret"
-# refresh_token_file = path + "/refresh_token.json"
-# spotify_client_secret_file = path + "/spotify_client_secret.json"
-# previous_last_played_file = path + "/previous_last_played.json"
 
 def diff_json_obj(arr1, arr2):
     """
@@ -49,14 +41,11 @@ def get_spotify_access_token():
     """
     # 1) Fetch new data
     print "READ spotify json files"
-    with open(refresh_token_file, 'r') as fp:
-        token = json.load(fp)
-        refresh_token = str(token["refresh_token"])
-
     with open(spotify_client_secret_file, 'r') as fp:
         client = json.load(fp)
         client_id = str(client["client_id"])
         client_secret = str(client["client_secret"])
+        refresh_token = str(client["refresh_token"])
 
     # Refresh token
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'
