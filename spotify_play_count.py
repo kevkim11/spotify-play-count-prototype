@@ -86,7 +86,6 @@ if __name__ == "__main__":
     
     Run this script when this project is first downloaded and prior to running main.py
     """
-
     with open(spotify_client_secret_file, 'r') as fp:
         client = json.load(fp)
         client_id = str(client["client_id"])
@@ -98,8 +97,10 @@ if __name__ == "__main__":
     headers = {'Authorization': 'Basic %s' % auth_header.decode()}
     payload = {'refresh_token': refresh_token,
                'grant_type': 'refresh_token'}
+
     response = requests.post(OAUTH_TOKEN_URL, data=payload, headers=headers)
     if response.status_code != 200:
+        print "error!"
         print "response.status_code = " + str(response.status_code)
 
     token_info = response.json()
@@ -113,3 +114,4 @@ if __name__ == "__main__":
 
     with open(previous_last_played_file, 'w') as fp:
         json.dump(content, fp)
+        print "Successfully Finished!"

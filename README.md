@@ -31,5 +31,5 @@ of personal play counts of tracks the user has listened to on their Spotify acco
 ## 3) Cron Job
 
 ## FAQ
-What happens if I am listening to my music offline?
+What happens if I am listening to my Spotify offline?
 
