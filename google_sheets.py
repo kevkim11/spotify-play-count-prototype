@@ -47,3 +47,14 @@ def update_google_sheets(dif_items):
                    item["played_at"]
                    ]
             sheet.append_row(row)
+
+def total_play_count():
+    # Google Spread Sheet Credentials
+    creds = ServiceAccountCredentials.from_json_keyfile_name(google_secret_client_file, scopes=scope)
+    gs_client = gspread.authorize(credentials=creds)
+    sheet = gs_client.open('Spotify Play Count').sheet1
+    play_count_list = sheet.col_values(6)
+    play_count_list = play_count_list[1:]
+    play_count_list = map(int, play_count_list) # py3 -> list(map(int, play_count_list))
+    print play_count_list
+    return sum(play_count_list)
