@@ -1,5 +1,6 @@
 from spotify_play_count import *
 from google_sheets import update_google_sheets
+import json
 
 if __name__ == "__main__":
 
@@ -10,9 +11,11 @@ if __name__ == "__main__":
 
     # 2.1) Load saved data
     print "READ previous last played json"
-    with open(previous_last_played_file, 'r') as fp:
-        data = json.load(fp)
-    saved_items = data["items"]
+    # previous_last_played_json.put(Body=json.dumps(previous_data))
+    data_str = previous_last_played_json.get()['Body'].read()
+    saved_items = json.loads(data_str)["items"]
+    # with open(previous_last_played_file, 'r') as fp:
+    #     saved_items = json.load(fp)["items"]
 
     # 3) Get the data based on the dif to add to the table.
     dif_items = diff_json_obj(fetched_items, saved_items)
@@ -24,7 +27,8 @@ if __name__ == "__main__":
         update_google_sheets(dif_items)
         print "WRITE new last played"
         # Save the fetched data last, after the table has been updated
-        with open(previous_last_played_file, 'w') as fp:
-            json.dump(content, fp)
+        previous_last_played_json.put(Body=json.dumps(content))
+        # with open(previous_last_played_file, 'w') as fp:
+        #     json.dump(content, fp)
     else:
         print "Nothing was updated"

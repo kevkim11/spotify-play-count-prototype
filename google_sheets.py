@@ -1,12 +1,15 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import json
 from general_const import *
 
 scope = ['https://spreadsheets.google.com/feeds']
 
 def update_google_sheets(dif_items):
     # Google Spread Sheet Credentials
-    creds = ServiceAccountCredentials.from_json_keyfile_name(google_secret_client_file, scopes=scope)
+    gsc_obj = json.loads(google_secret_client_json)
+    # creds = ServiceAccountCredentials.from_json_keyfile_name(google_secret_client_file, scopes=scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(gsc_obj, scopes=scope)
     gs_client = gspread.authorize(credentials=creds)
     sheet = gs_client.open('Spotify Play Count').sheet1
     print "ADD/UPDATE google sheets"
