@@ -8,9 +8,9 @@ if __name__ == "__main__":
     # s3 = boto3.resource('s3')
     #
     #
-    # google_secret_client_json = s3.Object('spotifyplaycount', 'secret/google_secret_client.json')
-    # spotify_client_secret_json = s3.Object('spotifyplaycount', 'secret/spotify_client_secret.json')
-    # previous_last_played_json = s3.Object('spotifyplaycount', 'secret/previous_last_played.json')
+    # google_secret_client_aws = s3.Object('spotifyplaycount', 'secret/google_secret_client.json')
+    # spotify_client_secret_aws = s3.Object('spotifyplaycount', 'secret/spotify_client_secret.json')
+    # previous_last_played_aws = s3.Object('spotifyplaycount', 'secret/previous_last_played.json')
 
 
     with open(google_secret_client_file, 'r') as fp:
@@ -19,13 +19,13 @@ if __name__ == "__main__":
         spotify_data = json.load(fp)
     with open(previous_last_played_file, 'r') as fp:
         previous_data = json.load(fp)
-    # google_secret_client_json.put(Body=json.dumps(data))
-    # data = google_secret_client_json.get()['Body'].read()
-    # spotify_client_secret_json.put(Body=json.dumps(spotify_data))
-    # data = spotify_client_secret_json.get()['Body'].read()
+    # google_secret_client_aws.put(Body=json.dumps(data))
+    # data = google_secret_client_aws.get()['Body'].read()
+    # spotify_client_secret_aws.put(Body=json.dumps(spotify_data))
+    # data = spotify_client_secret_aws.get()['Body'].read()
 
-    previous_last_played_json.put(Body=json.dumps(previous_data))
-    data = previous_last_played_json.get()['Body'].read()
+    previous_last_played_aws.put(Body=json.dumps(previous_data))
+    data = previous_last_played_aws.get()['Body'].read()
 
     print data
     pretty_data = json.loads(data)

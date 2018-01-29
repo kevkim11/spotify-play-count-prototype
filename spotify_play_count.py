@@ -43,7 +43,7 @@ def get_spotify_access_token():
     #     client_id = str(client["client_id"])
     #     client_secret = str(client["client_secret"])
     #     refresh_token = str(client["refresh_token"])
-    client_str = spotify_client_secret_json
+    client_str = spotify_client_secret_aws
     client = json.loads(client_str)
     client_id = str(client["client_id"])
     client_secret = str(client["client_secret"])

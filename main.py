@@ -11,8 +11,8 @@ if __name__ == "__main__":
 
     # 2.1) Load saved data
     print "READ previous last played json"
-    # previous_last_played_json.put(Body=json.dumps(previous_data))
-    data_str = previous_last_played_json.get()['Body'].read()
+    # previous_last_played_aws.put(Body=json.dumps(previous_data))
+    data_str = previous_last_played_aws.get()['Body'].read()
     saved_items = json.loads(data_str)["items"]
     # with open(previous_last_played_file, 'r') as fp:
     #     saved_items = json.load(fp)["items"]
@@ -27,7 +27,7 @@ if __name__ == "__main__":
         update_google_sheets(dif_items)
         print "WRITE new last played"
         # Save the fetched data last, after the table has been updated
-        previous_last_played_json.put(Body=json.dumps(content))
+        previous_last_played_aws.put(Body=json.dumps(content))
         # with open(previous_last_played_file, 'w') as fp:
         #     json.dump(content, fp)
     else:

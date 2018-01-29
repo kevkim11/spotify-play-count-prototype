@@ -7,7 +7,7 @@ scope = ['https://spreadsheets.google.com/feeds']
 
 def update_google_sheets(dif_items):
     # Google Spread Sheet Credentials
-    gsc_obj = json.loads(google_secret_client_json)
+    gsc_obj = json.loads(google_secret_client_aws)
     # creds = ServiceAccountCredentials.from_json_keyfile_name(google_secret_client_file, scopes=scope)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(gsc_obj, scopes=scope)
     gs_client = gspread.authorize(credentials=creds)
