@@ -9,15 +9,14 @@ if __name__ == "__main__":
     content = get_spotify_recently_played(access_token)
     fetched_items = content["items"]
 
-    # 2.1) Load saved data
+    # 1) Load saved data
     print "READ previous last played json"
-    # previous_last_played_aws.put(Body=json.dumps(previous_data))
     data_str = previous_last_played_aws.get()['Body'].read()
     saved_items = json.loads(data_str)["items"]
     # with open(previous_last_played_file, 'r') as fp:
     #     saved_items = json.load(fp)["items"]
 
-    # 3) Get the data based on the dif to add to the table.
+    # 2) Get the data based on the dif to add to the table.
     dif_items = diff_json_obj(fetched_items, saved_items)
 
     print "Number of items to update: " + str(len(dif_items))

@@ -1,3 +1,6 @@
 /secret
 /config
 *.pyc
+/deployment_bundle
+/env
+
