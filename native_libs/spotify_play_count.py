@@ -91,11 +91,12 @@ if __name__ == "__main__":
     
     Run this script when this project is first downloaded and prior to running main.py
     """
-    with open(spotify_client_secret_file, 'r') as fp:
-        client = json.load(fp)
-        client_id = str(client["client_id"])
-        client_secret = str(client["client_secret"])
-        refresh_token = str(client["refresh_token"])
+
+    client_str = spotify_client_secret_aws
+    client = json.loads(client_str)
+    client_id = str(client["client_id"])
+    client_secret = str(client["client_secret"])
+    refresh_token = str(client["refresh_token"])
 
     auth_header = base64.b64encode(str(client_id + ':' + client_secret).encode())
     OAUTH_TOKEN_URL = 'https://accounts.spotify.com/api/token'

@@ -1,5 +1,6 @@
 from spotify_play_count import *
 from google_sheets import update_google_sheets
+from mongodb import update_mongodb_doc
 import json
 
 if __name__ == "__main__":
@@ -24,6 +25,7 @@ if __name__ == "__main__":
     # Google Spread sheet - only update when there are dif_items
     if len(dif_items) > 0:
         update_google_sheets(dif_items)
+        # update_mongodb_doc(dif_items)
         print "WRITE new last played"
         # Save the fetched data last, after the table has been updated
         previous_last_played_aws.put(Body=json.dumps(content))

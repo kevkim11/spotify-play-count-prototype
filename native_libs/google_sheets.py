@@ -52,13 +52,44 @@ def update_google_sheets(dif_items):
             sheet.append_row(row)
 
 def total_play_count():
+    """
+    Grabs table from google sheets.
+    Get's the play_count column (col_values(6)) and returns the sum of the column
+    :return:
+    """
     # Google Spread Sheet Credentials
     gsc_obj = json.loads(google_secret_client_aws)
     creds = ServiceAccountCredentials.from_json_keyfile_dict(gsc_obj, scopes=scope)
     gs_client = gspread.authorize(credentials=creds)
     sheet = gs_client.open('Spotify Play Count').sheet1
+    # all_record_list = sheet.get_all_records()
+    # sorted_list = sorted(all_record_list, key=lambda k: k['play_count'], reverse=True)
     play_count_list = sheet.col_values(6)
     play_count_list = play_count_list[1:]
     play_count_list = map(int, play_count_list) # py3 -> list(map(int, play_count_list))
     print play_count_list
     return sum(play_count_list)
+
+def most_played_song():
+    gsc_obj = json.loads(google_secret_client_aws)
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(gsc_obj, scopes=scope)
+    gs_client = gspread.authorize(credentials=creds)
+    sheet = gs_client.open('Spotify Play Count').sheet1
+    all_record_list = sheet.get_all_records()
+    sorted_list = sorted(all_record_list, key=lambda k: k['play_count'], reverse=True)
+    # TODO Create a separate pretty function for this
+    # for i in range(10):
+    #     print(str(i+1) + ') ' + str(sorted_list[i]['track_name']) + ' by ' + str(sorted_list[i]['artist_name']) \
+    #           + ' ----> Play Count: ' + str(sorted_list[i]['play_count']))
+    template = "     {id:5}|{track_name:50}|{artist_name:50}|{play_count:10}" # same, but named
+    print "rank" + template.format( # header
+        id="id", track_name="track_name", artist_name="artist_name", play_count="play_count"
+    )
+    rank = 1
+    for rec in sorted_list[:10]:
+        print str(rank) + template.format(**rec)
+        rank += 1
+
+if __name__ == "__main__":
+    most_played_song()
+

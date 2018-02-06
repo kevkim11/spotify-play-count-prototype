@@ -28,7 +28,9 @@ of personal play counts of tracks the user has listened to on their Spotify acco
   * Spotify api - https://developer.spotify.com/web-api/
   * Google Sheets api -
 
-## 3) Cron Job
+## 3) Deployment to AWS/Cron Job
+  This project was deployed on AWS Lambda Function and S3. The json files are stored in S3 buckets and the `main.py` is used as a Lambda Function that is a cron job to be fired every hour.
+
 
 ## FAQ
 What happens if I am listening to my Spotify offline?
